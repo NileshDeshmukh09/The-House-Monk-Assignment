@@ -27,10 +27,12 @@ app.use(bodyParser.urlencoded({extended:true}));
     .catch( (err)=> console.log( err ));
     
 
+const authRouter = require('./routes/auth.routes');
 const homeRoutes = require('./routes/home.routes');
 
 
 app.use(  homeRoutes );
+app.use( '/api/v1' , authRouter );
 
 
 app.listen(process.env.PORT, () => {
