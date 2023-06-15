@@ -17,6 +17,20 @@ app.use(logger('dev'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+/**
+ * Setup the mongodb connection 
+ */
+
+
+ mongoose.connect(process.env.DB_URL)
+    .then( ()=> console.log("MongoDB connected "))
+    .catch( (err)=> console.log( err ));
+    
+
+const homeRoutes = require('./routes/home.routes');
+
+
+app.use(  homeRoutes );
 
 
 app.listen(process.env.PORT, () => {
