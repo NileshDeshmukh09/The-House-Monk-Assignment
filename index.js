@@ -27,12 +27,14 @@ app.use(bodyParser.urlencoded({extended:true}));
     .catch( (err)=> console.log( err ));
     
 
-const authRouter = require('./routes/auth.routes');
+const authRoutes = require('./routes/auth.routes');
 const homeRoutes = require('./routes/home.routes');
+const productRoutes = require('./routes/product.routes');
 
 
 app.use(  homeRoutes );
-app.use( '/api/v1' , authRouter );
+app.use( '/api' , authRoutes );
+app.use( '/api' , productRoutes );
 
 
 app.listen(process.env.PORT, () => {
