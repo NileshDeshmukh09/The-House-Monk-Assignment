@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique : true
   },
 
   description: {
@@ -20,6 +21,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+
+  createdBy : { // Who created product - userID  of the creater
+    type : String 
+  }
  
 });
 

@@ -16,6 +16,9 @@ router.post("/auth/signup", middleware.signupValidation , authController.signup 
  
  /** signin -- GET */
 router.post("/auth/login" , authController.signin );
+
+ /** signin -- GET */
+router.get("/users/:id" , authController.getUserById );
  
 
 

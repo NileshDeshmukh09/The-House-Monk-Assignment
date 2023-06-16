@@ -75,7 +75,7 @@ exports.signin = async (req, res) => {
 
         // Password is valid, proceed with successful login
         // Generate an access token using JWT
-        const accessToken = generateAccessToken(user.userID);
+        const accessToken = generateAccessToken( user.userID );
 
         // Send the response with the user details and access token
         res.status(200).send({
@@ -96,3 +96,30 @@ exports.signin = async (req, res) => {
     }
 };
 
+
+exports.getUserById = async (req, res) => {
+    const userId = req.params.id;
+  
+    try {
+      const user = await User.findOne({ userID : userId});
+  
+      if (!user) {
+        return res.status(404).json({success : true , message: 'User not found' });
+      }
+  
+      res.status(200).json({ 
+        success : true , 
+        user : {
+        _id: user._id,
+        userID: user.userID,
+        name: user.name,
+        products: user.products,
+        createdAt: user.createdAt ,
+        updatedAt: user.updatedAt,
+    } });
+    } catch (error) {
+      res.status(500).json({ success : false , message: 'Internal server error' });
+    }
+  };
+  
+ 

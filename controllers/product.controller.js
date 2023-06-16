@@ -1,4 +1,5 @@
 const Product = require('../models/product.model');
+const User = require("../models/user.model");
 
 // Controller function for adding a new product
 const addProduct = async (req, res) => {
@@ -8,6 +9,12 @@ const addProduct = async (req, res) => {
     // Check if all required fields are provided
     if ( !name ) {
       return res.status(400).json({ status : false , message : 'Name is required' });
+    }
+
+    const existingProduct = await Product.findOne({ name : name });
+
+    if( existingProduct ){
+      return res.status(400).json({ status : false , message : `${ existingProduct.name } Product Already exists` });
     }
     if ( !description ) {
       return res.status(400).json({ status : false , message : 'Description is required' });
@@ -19,18 +26,32 @@ const addProduct = async (req, res) => {
       return res.status(400).json({ status : false , message : 'Price is required' });
     }
 
+      /** User ID of reported must be present in x-access-token */
+      const user = await User.findOne({
+        userID : req.userID
+    });
+
+    createdBy = user.userID;
+    console.log( createdBy , " - ", user.userID );
     // Create a new product object
     const product = new Product({
       name,
       description,
       category,
-      price
+      price,
+      createdBy
     });
 
     // Save the product to the database
-    await product.save();
+   const savedProduct = await product.save();
 
-    return res.status(201).json({ success : true , message: 'Product added successfully', product });
+     /**
+      * Update the User
+    */
+     user.products.push(savedProduct._id);
+     await user.save();
+
+    return res.status(201).json({ success : true , message: ` ${ savedProduct.name } Product added successfully`, product });
   } catch (error) {
 
     console.log( error );
@@ -85,6 +106,11 @@ const deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id;
 
+     /** User ID of reported must be present in x-access-token */
+     const user = await User.findOne({
+      userID : req.userID
+  });
+
     // Check if the productId is provided
     if ( !productId ) {
       return res.status(400).json({ success : false , message : 'Product ID is required' });
@@ -96,6 +122,13 @@ const deleteProduct = async (req, res) => {
     // Check if the product exists
     if (!product) {
       return res.status(404).json({ success : false , message : 'Product not found' });
+    }
+
+    if( user.userID != product.createdBy ){
+      return res.status(403).send({
+        success :false ,
+        message: `Only Owner : ${ product.createdBy } of the Drone is allowed to Delete Product`,
+      })
     }
 
     // Delete the product
@@ -115,14 +148,23 @@ const updateProduct = async (req, res) => {
       const { id } = req.params;
       const { name, description, category , price } = req.body;
   
-     
+      /** User ID of reported must be present in x-access-token */
+      const user = await User.findOne({
+        userID : req.userID
+    });
       // Check if the drone exists
       const product = await Product.findOne({_id : id});
-  
+
+      
       if (!product ) {
         return res.status(404).json({  status : false , message : 'Product not found' });
       }
-  
+      
+      if( user.name != product.createdBy ){
+        return res.status(403).send({
+          message: `Only Owner : ${ product.createdBy } of the Drone is allowed to update Product `
+        })
+      }
 
   
       // Update the product fields

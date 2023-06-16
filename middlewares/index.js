@@ -1,7 +1,7 @@
 const signupValidation = require("./signup.middleware");
-// const JWTAuth = require("./JWTAuth");
+const JWTAuth = require("./JWTAuth");
 
 module.exports = {
     signupValidation ,
-    // JWTAuth
+    JWTAuth
 }
