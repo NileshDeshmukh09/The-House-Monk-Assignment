@@ -30,11 +30,13 @@ app.use(bodyParser.urlencoded({extended:true}));
 const authRoutes = require('./routes/auth.routes');
 const homeRoutes = require('./routes/home.routes');
 const productRoutes = require('./routes/product.routes');
+const orderRoutes = require('./routes/order.routes');
 
 
 app.use(  homeRoutes );
 app.use( '/api' , authRoutes );
 app.use( '/api' , productRoutes );
+app.use( '/api' , orderRoutes );
 
 
 app.listen(process.env.PORT, () => {
