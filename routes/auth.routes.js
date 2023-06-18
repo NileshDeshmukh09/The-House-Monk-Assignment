@@ -11,13 +11,13 @@ const router = express.Router();
 
  
  
- /** Signup -- GET */
+ /** Signup -- POST */
 router.post("/auth/signup", middleware.signupValidation , authController.signup );
  
- /** signin -- GET */
+ /** signin -- POST */
 router.post("/auth/login" , authController.signin );
 
- /** signin -- GET */
+ /** get-user-by-userID -- GET */
 router.get("/users/:id" , authController.getUserById );
  
 
