@@ -44,9 +44,11 @@ const addToCart = async (req, res) => {
       quantity 
     });
 
-
+    
+    
     // Save the updated cart
     const newProductToCart = await addProductTocart.save();
+    user.addToCart.push( newProductToCart._id );
 
     res.status(200).json({ status : true ,message : `${newProductToCart.productID } , saved to card !`,  newProductToCart});
   } catch (error) {
