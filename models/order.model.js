@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+/**
+* Schema for the Order Model will be provided Here
+*/
 
 const orderSchema = new mongoose.Schema({
   userID: {

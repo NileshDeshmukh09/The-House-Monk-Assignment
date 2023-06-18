@@ -26,8 +26,13 @@ const userSchema = new mongoose.Schema({
     products : {
         type: [mongoose.Schema.Types.ObjectId],
         ref: "Product" /* Collection Name */
-        /* One to Many Relationship between the Ticket's and the User */
+        /* One to Many Relationship between the Products and the User */
         
+    },
+
+    addToCart : {
+        type : [mongoose.Schema.Types.ObjectId],
+        ref : "Cart"
     }
 
 });
